@@ -1,0 +1,11 @@
+---
+title: "Jiayi Xue"
+about: 
+  id: hero-heading
+  template: jolla
+  image: photo-01.jpeg
+---
+
+### Thanks for stopping by my website!
+
+My name is Jiayi Xue. I got my bachelor's degree in Biology in Wuhan University, China. I am a first-year master student of Biostatistics in Johns Hopkins Bloomberg School of Public Health now.

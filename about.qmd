@@ -1,0 +1,33 @@
+---
+title: "About"
+---
+
+## Education
+
+**Johns Hopkins Bloomberg School of Public Health**
+
+ScM in Biostatistics \| 08/2023 - Present
+
+**Wuhan University**
+
+Bachelor of Science in Biology Science \| 09/2019 - 06/2023
+
+## Research Experience
+
+1.  University of Georgia \| Research Assistant \| 10/2022 - 04/2023
+2.  Wuhan University \| Research Assistant \| 06/2021 - 05/2022
+3.  Wuhan University \| Research Assistant \| 12/2020 - 04/2022
+
+## Professional interest
+
+I am interested in Statistical genomics.
+
+## Hobbies
+
+-   Play with my dog
+
+    ![](./dog.jpeg)
+
+-   Go out with friends
+
+-   Try new food

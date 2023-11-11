@@ -1,0 +1,183 @@
+---
+title: "Example analysis"
+bibliography: reference.bib
+editor_options: 
+  chunk_output_type: inline
+---
+
+![](./example_analysis.png)
+
+::: column-margin
+image saved from: Urban Institute, [Wealth Inequality Charts](https://apps.urban.org/features/wealth-inequality-charts/).
+:::
+
+### Question
+
+I tried to use this dataset to identify the change of income in America over time and compare the differences of income mean between different races.
+
+### Intended Audience
+
+The data is from TidyTuesday, which aims to involves datasets being shared for R users to apply their skills in data wrangling and data visualization[@tidytuesday]. Therefore, this dataset is ideal for data analyst to practice creating visualization and analyzing data. The website mentions income data by race over time, those who are interested in economic conditions and social issues are also the potential audiences.
+
+The intended audience for the data analysis appears to be data analysts and enthusiasts who participate in TidyTuesday, a weekly social data project in the R programming community. The project aims to engage users in creating visualizations and analyses of a given dataset.
+
+### Original Data
+
+The data comes from the Urban Institute and the US Census. The Urban Institute provided nine charts about racial wealth inequality in America[@urbanwealthinequality]. The US Census provided historical income tables that have been joined to compare wealth and income over time by race[@censusincome].
+
+I downloaded this dataset from [here](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_distribution.csv). You can also download this dataset using "tidytuesdayR" package[@tidytuesday].
+
+### Data Dictionary
+
+| Variable            | Description                                                                                                          |
+|--------------------------------------|----------------------------------|
+| year                | Year                                                                                                                 |
+| race                | Racial Group                                                                                                         |
+| number              | Number of households                                                                                                 |
+| income_median       | Income median                                                                                                        |
+| income_med_moe      | Income median margin of error                                                                                        |
+| income_mean         | Income mean                                                                                                          |
+| income_mean_moe     | Income mean margin of error                                                                                          |
+| income_bracket      | Income bracket (9 total brackets between \<\$15,000 and \>\$200,000                                                  |
+| income_distribution | Income distribution as the percentage of each year/racial group - should add up to 100 for a specific year and race. |
+
+: You can also find the data dictionary [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-02-09/readme.md_)
+
+```{r}
+#load data
+library(tidytuesdayR)
+library(tidyverse)
+
+
+income_distribution <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_distribution.csv')
+
+
+```
+
+### Data wrangling using dplyr
+
+```{r}
+
+income_distribution_by_year_race <- group_by(income_distribution, year, race) %>%
+  summarise(income_mean = mean(income_mean)) %>%
+  filter(!is.na(income_mean), !is.na(year), !is.na(race))
+
+income_by_year <- filter(income_distribution, race == "All Races")  %>%
+  mutate(income_bracket = factor(income_bracket, 
+                                 levels = c("Under $15,000","$15,000 to $24,999", "$25,000 to $34,999", "$35,000 to $49,999", "$50,000 to $74,999",   
+                                            "$75,000 to $99,999", "$100,000 to $149,999", "$150,000 to $199,999", "$200,000 and over"))) %>%
+  select(year, race, number, income_bracket, income_distribution)
+
+```
+
+::: callout-note
+### Functions Used
+
+-   `dplyr::group_by`
+-   `dplyr::summarise`
+-   `dplyr::filter`
+-   `dplyr::mutate`
+-   `dplyr::select`
+:::
+
+### Plot
+
+```{r, fig.dim=c(10, 8)}
+
+income_distribution_by_year_race  %>%
+  ggplot() +
+  geom_line(mapping = aes(x = year, y = income_mean, color = race)) +
+  theme_bw(base_family = "Times") +
+  labs(
+    x = "year",
+    y = "Income mean",
+    title = "Line plot of income mean by race over time",
+    caption = "Jiayi Xue",
+    subtitle = "Substantial Growth in Mean Income Across Racial Groups from 1967 to 2019",
+    color = "Race"
+  ) +
+  theme(
+        plot.title =  element_text(size = 16, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(size = 14),
+        plot.caption = element_text(size = 10),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 15),
+        strip.text = element_text(size = 15),
+        legend.text = element_text(size = 13),
+        legend.title = element_text(size = 14))
+
+
+```
+
+::: column-margin
+The results appear to have some level of duplicate data for "Asian Alone" and "Asian Alone or in Combination" since the dataset was created by combining some raw data from different sources. We are not changing the dataset to avoid breaking old code, but you may want to start from the raw data if you are using this for anything important.
+:::
+
+```{r, fig.dim=c(10,8)}
+
+income_distribution %>%
+  filter(!is.na(race), !is.na(income_mean)) %>%
+  ggplot() +
+  geom_boxplot(mapping = aes(x = race, y = income_mean, color = race)) +
+  theme_bw(base_family = "Times") +
+  labs(
+    x = "Race",
+    y = "Income Mean",
+    title = "Box plot of income mean by race",
+    subtitle = "Trend: The 'Asian Alone' and 'Asian Alone or in Combination' groups have higher median incomes compared to other groups, \nas indicated by the central line of their boxes. \nThey also have a wider interquartile range, suggesting more variation within the income distribution. \nAll Races has a median income lower than the Asian categories but higher than the rest. \nThe 'Black Alone' and 'Black Alone or in Combination' groups show lower median incomes with narrower interquartile ranges, \nindicating less variation within their income distributions.",
+    caption = "Jiayi Xue",
+    color = "Race"
+  ) +
+  theme(
+        plot.title =  element_text(size = 16, face = "bold", hjust = 0.5),
+        plot.caption = element_text(size = 10),
+        axis.text = element_text(size = 12),
+        axis.text.x = element_text(angle = 30, size = 12, hjust = 1),
+        axis.title = element_text(size = 15),
+        strip.text = element_text(size = 15),
+        legend.text = element_text(size = 13),
+        legend.title = element_text(size = 14))
+  
+```
+
+::: callout-important
+### Bar chart
+
+Given the extensive range of years, it's impractical to visualize each one individually. To manage this, I've sampled data at five-year intervals, starting from 1967, which allows for a comprehensive yet concise visual representation of trends over time.
+:::
+
+```{r, fig.dim=c(12, 10)}
+
+income_by_year %>%
+  filter(year %in% seq(from = 1967, to = 2019, by = 5)) %>%
+  ggplot(aes(x = income_bracket, y = income_distribution)) +
+  geom_col() +
+  facet_wrap(~year, nrow = 3, scales = "free") + 
+  theme_bw(base_family = "Times") +
+  labs(
+    x = "Income Bracket",
+    y = "Income distribution(in percentage)",
+    title = "Bar chart of income distribution of all races in each year",
+    subtitle = "As time progresses, there is a noticeable shift towards higher income brackets.",
+    caption = "Jiayi Xue"
+  ) +
+  theme(
+        plot.title =  element_text(size = 16, face = "bold", hjust = 0.5),
+        plot.caption = element_text(size = 10),
+        axis.text = element_text(size = 12),
+        axis.text.x = element_text(angle = 40, size = 9, hjust = 1),
+        axis.title = element_text(size = 15),
+        strip.text = element_text(size = 15))
+
+```
+
+### Summary
+
+The dataset provides a comprehensive overview of income distribution across different racial groups in the United States from 1967 to 2019. The line plot illustrates a substantial increase in mean income over time for all racial categories. The box plot reveals significant income disparities among the groups, with Asian and White races typically having higher income means than Black and Hispanic groups, which is consistent with the finding in this paper[@pewresearch2016demographics]. Finally, the bar chart demonstrates a shift towards higher income brackets over the decades, suggesting an overall increase in wealth among all races. Together, these visuals indicates the existence of income inequality and the progress made from 1967 to 2019.
+
+### Function used
+
+| Package   | Function                                                        |
+|------------------------------------|------------------------------------|
+| `dplyr`   | `group_by()`, `summarise()`, `filter()`, `mutate()`, `select()` |
+| `ggplot2` | `geom_line()`, `geom_boxplot()`, `geom_col()`                   |
