@@ -19,7 +19,6 @@ I tried to use this dataset to identify the change of income in America over tim
 
 The data is from TidyTuesday, which aims to involves datasets being shared for R users to apply their skills in data wrangling and data visualization[@tidytuesday]. Therefore, this dataset is ideal for data analyst to practice creating visualization and analyzing data. The website mentions income data by race over time, those who are interested in economic conditions and social issues are also the potential audiences.
 
-The intended audience for the data analysis appears to be data analysts and enthusiasts who participate in TidyTuesday, a weekly social data project in the R programming community. The project aims to engage users in creating visualizations and analyses of a given dataset.
 
 ### Original Data
 
@@ -41,7 +40,7 @@ I downloaded this dataset from [here](https://raw.githubusercontent.com/rfordata
 | income_bracket      | Income bracket (9 total brackets between \<\$15,000 and \>\$200,000                                                  |
 | income_distribution | Income distribution as the percentage of each year/racial group - should add up to 100 for a specific year and race. |
 
-: You can also find the data dictionary [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-02-09/readme.md_)
+: You can also find the data dictionary [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-02-09/readme.md)
 
 ```{r}
 #load data
