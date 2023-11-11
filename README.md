@@ -1,6 +1,10 @@
 # biostat777-intro-jiayi-xue
 
-Author: Jiayi Xue link to the website: https://jiayixue.quarto.pub/biostat777-intro-jiayi-xue/
+Author: Jiayi Xue 
+
+
+link to the website: https://jiayixue.quarto.pub/biostat777-intro-jiayi-xue/
+
 
 Technical details:
 
