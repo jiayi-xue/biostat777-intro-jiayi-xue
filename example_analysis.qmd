@@ -61,12 +61,15 @@ income_distribution_by_year_race <- group_by(income_distribution, year, race) %>
   summarise(income_mean = mean(income_mean)) %>%
   filter(!is.na(income_mean), !is.na(year), !is.na(race))
 
+income_distribution_by_year_race
+
 income_by_year <- filter(income_distribution, race == "All Races")  %>%
   mutate(income_bracket = factor(income_bracket, 
                                  levels = c("Under $15,000","$15,000 to $24,999", "$25,000 to $34,999", "$35,000 to $49,999", "$50,000 to $74,999",   
                                             "$75,000 to $99,999", "$100,000 to $149,999", "$150,000 to $199,999", "$200,000 and over"))) %>%
   select(year, race, number, income_bracket, income_distribution)
 
+income_by_year
 ```
 
 ::: callout-note
